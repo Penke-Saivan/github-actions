@@ -1,0 +1,18 @@
+name: Conditions
+on: [push]
+jobs:
+  condition-demo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print Hello world
+      run: echo "Print Hello world"
+
+    - name: Trigger PROD deploy
+      if : github.ref == 'refs/heads/main'
+      run: echo "deploy to PROD"
+
+    - name: Trigger DEV deploy
+      if : github.ref == 'refs/heads/feature-*'
+      run: echo "deploy to DEV"
+
+
