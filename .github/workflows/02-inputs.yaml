@@ -1,0 +1,40 @@
+name: Example Workflow with Inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Your name'
+        required: true
+        default: 'Developer'
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+        default: development
+      debug_mode:
+        description: 'Enable debug mode?'
+        required: false
+        default: 'false'
+
+jobs:
+  run-with-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show received inputs
+        run: |
+          echo "Name: ${{ github.event.inputs.name }}"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Debug Mode: ${{ github.event.inputs.debug_mode }}"
+
+      - name: Conditional step based on environment
+        if: ${{ github.event.inputs.environment == 'production' }}
+        run: echo "🚀 Deploying to PRODUCTION!"
+
+      - name: Conditional debug step
+        if: ${{ github.event.inputs.debug_mode == 'true' }}
+        run: echo "🔍 Debug mode is ON"
